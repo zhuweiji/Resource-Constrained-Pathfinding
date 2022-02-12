@@ -1,33 +1,38 @@
 import heapq
-from os import path
 import json
-with open(r'C:\Users\zhuwe\OneDrive\Desktop\VS Code Environment\CZ3005\G.json') as graph_data:
+from pathlib import Path
+
+from utils.utils import timeit, progress_display
+
+
+cwd = Path.cwd()
+data_dir = cwd / 'data'
+
+with open(data_dir / 'G.json') as graph_data:
     graphdict = json.load(graph_data)
 
-with open(r'C:\Users\zhuwe\OneDrive\Desktop\VS Code Environment\CZ3005\Dist.json') as dist_data:
+with open(data_dir / 'Dist.json') as dist_data:
     distancedict = json.load(dist_data)
 
-with open(r'C:\Users\zhuwe\OneDrive\Desktop\VS Code Environment\CZ3005\Cost.json') as cost_data:
+with open(data_dir / 'Cost.json') as cost_data:
     costdict = json.load(cost_data)
 
 
-
+@timeit
 def BFS_all_edges(graph, start, target, max_energy_cost=287932):
-    # initialize nodes to have properties 1. g(n) (distance) and 2. shortest path to that node thus far
     for node in graph:
         graph[node] = [graph[node], None, []]
 
-    # create a heap of nodes to be explored next, ordered by g(n) to that node
     queue = [(0, start)]
-    explored_edge_list = set() # maintain a list of explored edges, which may need to be traversed again
+    explored_edge_list = set() 
     graph[start][1:] = 0, []
     final_path = None
 
     node_count = 0
 
-    display_update = progress_display(log_every=10000)
+    logger = progress_display(log_every=10000)
     while queue:
-        display_update()
+        logger()
 
         dist, current_node = heapq.heappop(queue)
         neighbours, distance_to_curr, path_to_curr = graph[current_node]
@@ -58,19 +63,14 @@ def BFS_all_edges(graph, start, target, max_energy_cost=287932):
                 heapq.heappush(queue, (edge_distance, neighbour))
 
             explored_edge_list.add(edge)
-
+    
+    logger(True)
     return final_path
 
 
-def progress_display(log_every:int=10000,total_count:int=None):
-    """Helper function to display a message every {log_every} iterations"""
-    index = 0
-    def display_updater():
-        nonlocal index
-        index+=1
-        if index % log_every == 0:
-            print(f'{index}           \r', end=' ')
-    return display_updater
+if __name__ == "__main__":
+    distance, path = BFS_all_edges(graphdict, '1', '50')
 
-print()
-BFS_all_edges(graphdict, '1', '50')
+    path = "->".join(path)
+    print()
+    print(f"{distance=}\n{path=}")
