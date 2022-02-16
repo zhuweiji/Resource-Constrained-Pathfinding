@@ -19,7 +19,7 @@ def timeit(func):
         s = time.perf_counter()
         result = func(*args, **kwargs)
         e = time.perf_counter()
-        print(f'Completed in {round(e-s,4)} seconds')
+        print(f'Function {func.__name__}: Completed in {round(e-s,4)} seconds')
 
         return result
     return decorator

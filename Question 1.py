@@ -17,6 +17,8 @@ with open(data_dir / 'Dist.json') as dist_data:
 with open(data_dir / 'Cost.json') as cost_data:
     costdict = json.load(cost_data)
 
+print('import complete')
+
 @timeit
 def uniform_cost_search(graph, start, target):
     # initialize nodes to have properties 1. g(n) (distance), 2. g(n) (cost) and 2. shortest path to that node thus far
