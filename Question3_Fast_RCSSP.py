@@ -11,6 +11,11 @@ GLOBAL_ITERATIONS = 0
 
 @timeit
 def a_star_search(graph, distancecosts, energycosts, coords, start, target):
+    graph = graph.copy()   
+    distancecosts = distancecosts.copy()   
+    energycosts = energycosts.copy() 
+    coords = coords.copy()  
+
     global GLOBAL_ITERATIONS
     result = {'distance': None,'energy': None, 'path': None}
     
@@ -52,6 +57,10 @@ def a_star_search(graph, distancecosts, energycosts, coords, start, target):
 
 
 def shortest_energy_cost_path(graph, distancecosts, energycosts, start, target):
+    graph = graph.copy()
+    distancecosts = distancecosts.copy()
+    energycosts  = energycosts.copy()
+    
     global GLOBAL_ITERATIONS
     result = {'distance': None, 'energy': None, 'path': None}
 

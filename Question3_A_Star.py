@@ -11,6 +11,10 @@ GLOBAL_ITERATIONS = 0
 
 @timeit
 def a_star_search(graph, distancecosts, energycosts, coords, start, target, max_energy_cost=287932):
+    graph = graph.copy()
+    distancecosts = distancecosts.copy()
+    energycosts = energycosts.copy()
+    coords = coords.copy()
     global GLOBAL_ITERATIONS
     result = {'distance': None,'energy': None, 'path': None}
     
@@ -45,6 +49,7 @@ def a_star_search(graph, distancecosts, energycosts, coords, start, target, max_
             if energy_to_neighbour > max_energy_cost: continue
 
             if node == target:
+                logger(True)
                 result['distance'] = distance_to_neighbour
                 result['energy'] = energy_to_neighbour
                 result['path'] = path_to_neighbour
@@ -72,12 +77,13 @@ if __name__ == "__main__":
 
     print('import complete')
 
+
+
     res = a_star_search(graph=graphdict, distancecosts=distancedict,
             energycosts=costdict, coords=coordsdict, start='1', target='50',)
     
     dist, energy, path = res['distance'], res['energy'], res['path']
     print('-'*50)
-    print(f'Completed with {GLOBAL_ITERATIONS} iterations')
     print(f'dist={dist=}')
     print(f'energy={energy=}')
     path = "->".join(path)

@@ -8,19 +8,11 @@ from utils.utils import timeit, progress_display
 cwd = Path(__file__).parent.resolve()
 data_dir = cwd / 'data'
 
-with open(data_dir / 'G.json') as graph_data:
-    graphdict = json.load(graph_data)
-
-with open(data_dir / 'Dist.json') as dist_data:
-    distancedict = json.load(dist_data)
-
-with open(data_dir / 'Cost.json') as cost_data:
-    costdict = json.load(cost_data)
-
-print('import complete')
 
 @timeit
-def uniform_cost_search(graph, start, target):
+def uniform_cost_search(graph, distances, start, target):
+    graph = graph.copy()
+    distances = distances.copy()
     # initialize nodes to have properties 1. g(n) (distance), 2. g(n) (cost) and 2. shortest path to that node thus far
     for node in graph:
         graph[node] = [graph[node], None, []]
@@ -51,7 +43,7 @@ def uniform_cost_search(graph, start, target):
 
             edge_key = f'{current_node},{node}'     # key to access an edge's properties in the json data file provided
             
-            edge_distance = distancedict[edge_key]  
+            edge_distance = distances[edge_key]  
             dist_to_neighbour = dist_to_curr + edge_distance    # calculate the g(n) of neighbouring nodes of the currently explored node to add them to the queue
 
             # while technically not exploring the neighbour nodes, since we calculated g(n) and path to the node already, we can just store the information
@@ -67,7 +59,14 @@ def uniform_cost_search(graph, start, target):
 
 
 if __name__ == "__main__":
-    distance, path = uniform_cost_search(graphdict, '1', '50')
+    with open(data_dir / 'G.json') as graph_data:
+        graphdict = json.load(graph_data)
+
+    with open(data_dir / 'Dist.json') as dist_data:
+        distancedict = json.load(dist_data)
+
+
+    distance, path = uniform_cost_search(graphdict, distancedict, '1', '50')
 
     path = "->".join(path)
     print()

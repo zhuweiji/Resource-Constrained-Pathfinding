@@ -6,6 +6,10 @@ from utils.utils import timeit, progress_display
 
 @timeit
 def bestFirstSearch(graph, distancecosts, energycosts, start, target, energy_weight=1, distance_weight=1, max_energy_cost=287932):
+    graph = graph.copy()
+    distancecosts = distancecosts.copy()
+    energycosts = energycosts.copy()
+    
     logger = progress_display(log_every=10000)
 
     graph = {k:v for k,v in graph.items()}
@@ -32,6 +36,7 @@ def bestFirstSearch(graph, distancecosts, energycosts, start, target, energy_wei
 
         explored_nodes.add(current_node)  # since UCS guarantees that every node explored has the shortest possible path from source, we can discard the node from future exploration
 
+        
         for node in neighbours:
             try:
                 if node in explored_nodes:

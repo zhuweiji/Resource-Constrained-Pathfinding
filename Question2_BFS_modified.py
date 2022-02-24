@@ -6,6 +6,8 @@ from utils.utils import timeit, progress_display
 
 @timeit
 def BFS_all_edges(graph, start, target, max_energy_cost=287932):
+    graph = graph.copy()
+    
     for node in graph:
         graph[node] = [graph[node], None, []]
 
